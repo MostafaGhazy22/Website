@@ -128,7 +128,11 @@
         </p>
 
         <!-- LED Control Section -->
+<<<<<<< HEAD
         <div class="update_led">
+=======
+        <div class="led-control">
+>>>>>>> 1fbd542c0d0ce3c2b2f1a4059fe72bf85c2dd022
             <h2>LED Control</h2>
             <button id="led-on" onclick="changeLedStatus('ON')">Turn LED ON</button>
             <button id="led-off" onclick="changeLedStatus('OFF')">Turn LED OFF</button>
@@ -154,7 +158,11 @@
             const formData = new FormData();
             formData.append('status', status);
 
+<<<<<<< HEAD
             fetch('update_led.php', {
+=======
+            fetch('led_control.php', {
+>>>>>>> 1fbd542c0d0ce3c2b2f1a4059fe72bf85c2dd022
                 method: 'POST',
                 body: formData,
             })
@@ -167,7 +175,11 @@
         }
 
         function fetchLedStatus() {
+<<<<<<< HEAD
             fetch('update_led.php')
+=======
+            fetch('led_control.php')
+>>>>>>> 1fbd542c0d0ce3c2b2f1a4059fe72bf85c2dd022
                 .then(response => response.text())
                 .then(data => {
                     const status = data.trim() === '1' ? 'ON' : 'OFF'; // Assuming '1' means ON, '0' means OFF
