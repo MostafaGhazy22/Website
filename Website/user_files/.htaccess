@@ -1,0 +1,8 @@
+# Deny access to all files by default
+Order Deny,Allow
+Deny from all
+
+# Allow access to the device status files only if the user is logged in
+<FilesMatch "device_status_.*\.txt">
+    Allow from env=loggedin
+</FilesMatch>
