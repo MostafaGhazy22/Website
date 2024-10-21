@@ -1,115 +1,32 @@
 <?php
-// Include config file for database connection
-require 'config.php';
 session_start();
+require 'config.php';
 
-// Check if the user is logged in, if not redirect to login page
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: login.php");
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
     exit();
 }
 
-// Define the path for the user's device status file
-$user_id = $_SESSION['user_id'];
-$status_file = "user_files/device_status_" . $user_id . ".txt";
+// Get the device from the query parameter (either 'led' or 'fan')
+$device = isset($_GET['device']) ? $_GET['device'] : 'led';
 
-// Initialize the device status variable
-$device_status = "OFF"; // Default to OFF
-
-// Check if the status file exists and read the current status
-if (file_exists($status_file)) {
-    $current_status = trim(file_get_contents($status_file));
-    $device_status = ($current_status == "1") ? "ON" : "OFF"; // Convert 1/0 to ON/OFF for display
+// Define the appropriate file path based on the device
+if ($device == 'fan') {
+    $file_path = 'user_files/fan_status_' . $_SESSION['user_id'] . '.txt';
 } else {
-    // If no file exists, create it and set the default status
-    file_put_contents($status_file, "0"); // Default to OFF (0)
+    $file_path = 'user_files/device_status_' . $_SESSION['user_id'] . '.txt'; // Default to LED
 }
 
-// Handle device control (e.g., toggling LED or fan status)
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['toggle'])) {
-        // Toggle the device status
-        if ($current_status == "0") {
-            $device_status = "ON"; // Display ON
-            file_put_contents($status_file, "1"); // Write 1 for ON
-        } else {
-            $device_status = "OFF"; // Display OFF
-            file_put_contents($status_file, "0"); // Write 0 for OFF
-        }
-    }
-}
-?>
+// Read the current status; default to '0' if the file doesn't exist
+$current_status = file_exists($file_path) ? trim(file_get_contents($file_path)) : '0';
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Control</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding-top: 50px;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #333;
-        }
-        .status {
-            font-size: 24px;
-            margin: 20px 0;
-        }
-        .status span {
-            font-weight: bold;
-            color: #007bff;
-        }
-        .btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        a {
-            display: block;
-            margin-top: 20px;
-            color: #333;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
+// Toggle the status (if it's 1, make it 0; if it's 0, make it 1)
+$new_status = ($current_status == "1") ? '0' : '1';
 
-<div class="container">
-    <h2>Control Your Device, <?php echo htmlspecialchars($_SESSION['username']); ?></h2>
+// Write the new status back to the file
+file_put_contents($file_path, $new_status);
 
-    <div class="status">
-        <p>Current Device Status: <span><?php echo $device_status; ?></span></p>
-    </div>
-
-    <form method="post">
-        <input type="submit" name="toggle" class="btn" value="Toggle Device Status">
-    </form>
-
-    <a href="dashboard.php">Back to Dashboard</a>
-    <a href="logout.php">Logout</a>
-</div>
-
-</body>
-</html>
+// Redirect back to the dashboard after updating
+header('Location: dashboard.php');
+exit();

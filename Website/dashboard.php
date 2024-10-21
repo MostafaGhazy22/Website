@@ -8,12 +8,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Define the path for the user's device status file
-$file_path = 'user_files/device_status_' . $_SESSION['user_id'] . '.txt';
+// Define paths for the user's device (LED) and fan status files
+$led_file_path = 'user_files/device_status_' . $_SESSION['user_id'] . '.txt';
+$fan_file_path = 'user_files/fan_status_' . $_SESSION['user_id'] . '.txt';
 
-// Read the current device status; default to '0' if the file doesn't exist
-$current_status = file_exists($file_path) ? trim(file_get_contents($file_path)) : '0'; 
-$device_status = ($current_status == "1") ? "ON" : "OFF"; // Convert 1/0 to ON/OFF for display
+// Read the current LED status; default to '0' if the file doesn't exist
+$current_led_status = file_exists($led_file_path) ? trim(file_get_contents($led_file_path)) : '0';
+$led_status = ($current_led_status == "1") ? "ON" : "OFF"; // Convert 1/0 to ON/OFF for display
+
+// Read the current fan status; default to '0' if the file doesn't exist
+$current_fan_status = file_exists($fan_file_path) ? trim(file_get_contents($fan_file_path)) : '0';
+$fan_status = ($current_fan_status == "1") ? "ON" : "OFF"; // Convert 1/0 to ON/OFF for display
 ?>
 
 <!DOCTYPE html>
@@ -63,8 +68,16 @@ $device_status = ($current_status == "1") ? "ON" : "OFF"; // Convert 1/0 to ON/O
 
 <div class="container">
     <h1>User Dashboard</h1>
-    <p class="status">Device Status: <span><?php echo $device_status; ?></span></p>
-    <a href="control.php">Control Device</a>
+
+    <!-- Display LED Status -->
+    <p class="status">LED Status: <span><?php echo $led_status; ?></span></p>
+    
+    <!-- Display Fan Status -->
+    <p class="status">Fan Status: <span><?php echo $fan_status; ?></span></p>
+
+    <!-- Links to control the devices -->
+    <a href="control.php?device=led">Control LED</a>
+    <a href="control.php?device=fan">Control Fan</a>
     <a href="logout.php">Logout</a>
 </div>
 
