@@ -1,9 +1,9 @@
 <?php
 // Database credentials
-$servername = "sql112.infinityfree.com"; // Replace with your actual database server name
-$username = "if0_37492642"; // Replace with your actual database username
-$password = "M1o1s1t1"; // Replace with your actual database password
-$dbname = "if0_37492642_iot"; // Replace with your actual database name
+$servername = "fdb1030.awardspace.net"; 
+$username = "4547693_data"; 
+$password = "123456789#m"; 
+$dbname = "4547693_data"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

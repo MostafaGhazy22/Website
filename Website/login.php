@@ -1,7 +1,7 @@
 <?php
 // Include config file for database connection
 require 'config.php';
-session_start();
+session_start(); // Start the session at the beginning
 
 // Define variables and initialize them as empty
 $username = $password = "";
@@ -26,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // If there are no errors, proceed to verify the username and password
     if (empty($username_err) && empty($password_err)) {
-
         // Prepare a select statement to retrieve user details
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
         
@@ -42,10 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bind_result($id, $username, $hashed_password);
                     if ($stmt->fetch()) {
                         if (password_verify($password, $hashed_password)) {
-                            // Password is correct, start a new session
-                            session_start();
-
-                            // Store data in session variables
+                            // Password is correct, store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["user_id"] = $id;
                             $_SESSION["username"] = $username;
@@ -128,13 +124,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div>
             <label>Username</label>
-            <input type="text" name="username" value="<?php echo $username; ?>">
+            <input type="text" name="username" value="<?php echo htmlspecialchars($username); ?>">
             <span class="error"><?php echo $username_err; ?></span>
         </div>    
 
         <div>
             <label>Password</label>
-            <input type="password" name="password" value="<?php echo $password; ?>">
+            <input type="password" name="password" value="">
             <span class="error"><?php echo $password_err; ?></span>
         </div>
 

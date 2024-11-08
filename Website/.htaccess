@@ -1,0 +1,14 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Optional: Redirect www to non-www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+# Allow access for specific user agents (modify as needed)
+RewriteCond %{HTTP_USER_AGENT} !^.*(Mozilla|Chrome|Safari).*$ [NC]
+RewriteRule .* - [F,L]
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>

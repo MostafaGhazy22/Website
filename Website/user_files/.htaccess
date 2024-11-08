@@ -6,3 +6,13 @@ Deny from all
 <FilesMatch "device_status_.*\.txt">
     Allow from env=loggedin
 </FilesMatch>
+
+# Allow access to fan-status.txt if the user is logged in
+<FilesMatch "fan_status_.*\.txt">
+    Allow from env=loggedin
+</FilesMatch>
+
+# Allow access to fan-status.txt if the user is logged in
+<FilesMatch "gas_status_.*\.txt">
+    Allow from env=loggedin
+</FilesMatch>

@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Get the device from the query parameter (either 'led' or 'fan')
+// Get the device from the query parameter (either 'led', 'fan', or 'gas')
 $device = isset($_GET['device']) ? $_GET['device'] : 'led';
 
 // Define the appropriate file path based on the device
@@ -30,3 +30,4 @@ file_put_contents($file_path, $new_status);
 // Redirect back to the dashboard after updating
 header('Location: dashboard.php');
 exit();
+?>
